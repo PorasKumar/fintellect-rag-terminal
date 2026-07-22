@@ -256,6 +256,34 @@ glass_css = """
             bottom: 10px !important;
         }
     }
+
+    /* --- MOBILE SIDEBAR FIX & TOGGLE BUTTON ENHANCEMENT --- */
+    @media (max-width: 768px) {
+        /* Completely hide text overflow when the sidebar is collapsed */
+        section[data-testid="stSidebar"][aria-expanded="false"] {
+            margin-left: -100% !important;
+            width: 0px !important;
+            min-width: 0px !important;
+            overflow: hidden !important;
+        }
+
+        /* Prevent sidebar inner elements from wrapping into vertical single-letter columns */
+        section[data-testid="stSidebar"] * {
+            white-space: nowrap !important;
+            word-break: normal !important;
+        }
+
+        /* Highlight and position Streamlit's native sidebar collapse/expand toggle button on mobile */
+        button[data-testid="stSidebarCollapseButton"],
+        button[data-testid="baseButton-header"] {
+            background-color: rgba(10, 25, 47, 0.85) !important;
+            border: 1px solid rgba(56, 189, 248, 0.4) !important;
+            border-radius: 10px !important;
+            color: #38bdf8 !important;
+            padding: 6px 12px !important;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.25) !important;
+            z-index: 999999 !important;
+        }
 </style>
 """
 st.markdown(glass_css, unsafe_allow_html=True)
