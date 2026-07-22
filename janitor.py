@@ -20,7 +20,7 @@ stats = index.describe_index_stats()
 namespaces = stats.get("namespaces",{})
 
 current_time = time.time()
-MAX_AGE_SECONDS = 300 #max time for a namespace to live
+MAX_AGE_SECONDS = 10800 #max time for a namespace to live
 
 print(f"🧹 Running Janitor Sweep at {time.ctime()}...")
 print(f"Found {len(namespaces)} active namespaces.")
