@@ -10,230 +10,131 @@ st.set_page_config(page_title="Financial RAG Terminal", layout="wide")
 
 glass_css = """
 <style>
-    /* Prevent full screen scrolling entirely */
-    html, body, .stApp {
-        background: linear-gradient(135deg, #0a192f 0%, #122540 35%, #234b70 75%, #3b6d9c 100%);
-        color: #f1f5f9;
-        height: 100vh !important;
-        overflow: hidden !important;
+    /* ==========================================================================
+       1. GLOBAL DARK THEME & BASE STYLES
+       ========================================================================== */
+    .stApp {
+        background-color: #0E1117 !important;
+        color: #FAFAFA !important;
     }
 
-    /* Hardware-accelerated sunrise animation */
-    @keyframes sunrise {
-        0% { opacity: 0; transform: translateY(10px); }
-        100% { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Smooth upward slide & fade keyframe for UI transitions */
-    @keyframes slideUpInput {
-        0% {
-            opacity: 0;
-            transform: translateY(18px) scale(0.98);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-
-    .brand-title { 
-        animation: sunrise 0.4s ease-out forwards; 
-        color: #ffffff; 
-        font-size: 2.8rem; 
-        font-weight: 800;
-        margin-bottom: 0px;
-        letter-spacing: -0.5px;
-    }
-    .brand-tagline { 
-        animation: sunrise 0.5s ease-out 0.08s forwards; 
-        opacity: 0; 
-        color: #38bdf8; 
-        font-size: 1.2rem;
-        font-weight: 400;
-        margin-top: 5px;
-        margin-bottom: 20px;
-    }
-    .brand-mic { 
-        animation: sunrise 0.6s ease-out 0.15s forwards; 
-        opacity: 0; 
-        color: rgba(255, 255, 255, 0.6); 
-        font-size: 1rem;
-        font-weight: 300;
-        letter-spacing: 1px;
-    }
-
-    /* Screen size responsive container to block scrolling entirely */
-    .auth-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        margin: 18vh auto 2vh auto;
-        max-width: 480px;
-        padding: 30px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 20px;
-    }
-
-    /* Apply a distinct, clean glassy text box container around BOTH inputs */
-    div[data-testid="stTextInput"] > div,
-    .stChatInput > div {
-        background: rgba(10, 25, 47, 0.7) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        border-radius: 12px !important;
-        box-shadow: none !important;
-        outline: none !important;
-        transition: border-color 0.35s cubic-bezier(0.25, 1, 0.5, 1), 
-                    box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                    background-color 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
-    }
-
-    /* Smooth entrance animation for the chat input container on state refresh */
-    .stChatInput {
-        animation: slideUpInput 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-        will-change: transform, opacity;
-    }
-
-    /* Smooth placeholder text color transition */
-    .stChatInput textarea::placeholder {
-        transition: opacity 0.3s ease, color 0.3s ease !important;
-    }
-
-    /* Completely isolate and strip down the inner sub-elements to ensure zero red bleed */
-    div[data-testid="stTextInput"] div, 
-    div[data-testid="stTextInput"] input,
+    /* Force all text inputs, textareas, and select boxes to stay dark */
+    div[data-baseweb="input"], 
     div[data-baseweb="base-input"],
-    div[data-baseweb="input"] {
-        border: none !important;
-        box-shadow: none !important;
-        outline: none !important;
+    div[data-baseweb="textarea"],
+    .stTextInput > div > div,
+    .stTextArea > div > div {
+        background-color: #262730 !important;
+        color: #FAFAFA !important;
+        border-color: #444444 !important;
+        border-radius: 8px !important;
     }
 
-    /* Elegant hover state for both fields */
-    div[data-testid="stTextInput"] > div:hover,
-    .stChatInput > div:hover {
-        border-color: rgba(56, 189, 248, 0.6) !important;
-        box-shadow: 0 0 35px rgba(56, 189, 248, 0.2) !important;
+    /* Target inner input fields for text color and placeholder contrast */
+    input, textarea {
+        color: #FAFAFA !important;
+        -webkit-text-fill-color: #FAFAFA !important;
     }
 
-    /* Massive, blurry premium sky-blue ambient focus glow when active/clicked */
-    div[data-testid="stTextInput"] > div:focus-within,
-    .stChatInput > div:focus-within {
-        border-color: #38bdf8 !important;
-        background: rgba(10, 25, 47, 0.8) !important;
-        box-shadow: 0 0 45px rgba(56, 189, 248, 0.4) !important;
+    ::placeholder {
+        color: #A0AAB2 !important;
+        opacity: 1 !important;
     }
 
-    /* Keep text entries clean white globally */
-    div[data-testid="stTextInput"] input, 
-    .stChatInput textarea {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+    /* Fix Chrome/Safari mobile auto-fill turning inputs white */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill {
+        -webkit-text-fill-color: #FAFAFA !important;
+        -webkit-box-shadow: 0 0 0px 1000px #262730 inset !important;
+        transition: background-color 5000s ease-in-out 0s;
     }
 
-    /* --- SLEEK PURE CSS ACTION BUTTON INTERACTIONS --- */
+    /* Header & Title Styling */
+    h1, h2, h3, h4, h5, h6, span, label {
+        color: #FAFAFA !important;
+    }
+
+    /* Sidebar Background & Inputs */
+    [data-testid="stSidebar"] {
+        background-color: #161B22 !important;
+        border-right: 1px solid #30363D !important;
+    }
+
+    /* Button Styling */
     .stButton > button {
-        background: rgba(255, 255, 255, 0.06) !important;
-        color: #ffffff !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        border-radius: 10px;
-        padding: 10px 20px;
-        font-weight: 600;
-        transform: translateY(0) scale(1);
-        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    border-color 0.3s ease, 
-                    box-shadow 0.3s ease,
-                    background-color 0.2s ease !important;
+        background-color: #262730 !important;
+        color: #FAFAFA !important;
+        border: 1px solid #444444 !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease-in-out !important;
     }
-    
-    /* Spring hover with subtle blue bloom aura */
+
     .stButton > button:hover {
-        background: rgba(56, 189, 248, 0.12) !important;
-        border-color: #38bdf8 !important;
-        box-shadow: 0 6px 20px rgba(56, 189, 248, 0.25) !important;
-        transform: translateY(-2px) scale(1.02);
+        background-color: #4CAF50 !important;
+        color: #FFFFFF !important;
+        border-color: #4CAF50 !important;
     }
 
-    /* Snappy responsive compression when clicked */
-    .stButton > button:active {
-        transform: translateY(1px) scale(0.97) !important;
-        background: rgba(56, 189, 248, 0.25) !important;
-        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.15) !important;
-        transition: transform 0.05s linear !important;
+    /* Streamlit Native Chat Input Styling */
+    .stChatInputContainer {
+        background-color: #262730 !important;
+        border-color: #444444 !important;
+        border-radius: 12px !important;
     }
 
-    section[data-testid="stSidebar"] {
-        background: #0a192f !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
-    }
+    /* ==========================================================================
+       2. MOBILE RESPONSIVE MEDIA QUERIES (Screen width <= 768px)
+       ========================================================================== */
+    @media (max-width: 768px) {
+        /* Reduce overall container padding so content fits comfortably */
+        .main .block-container {
+            padding-top: 1rem !important;
+            padding-bottom: 5rem !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+        }
 
-    /* --- MAIN INTERFACE ENTRANCE TRANSITIONS --- */
-    .stMainBlockContainer {
-        animation: sunrise 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    
-    section[data-testid="stSidebar"] { 
-        background: #0a192f !important; 
-        border-right: 1px solid rgba(255, 255, 255, 0.08); 
-        animation: sunrise 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-    
-    .chat-scroll-container {
-        max-height: 70vh;
-        overflow-y: auto;
-        padding-right: 10px;
-    }
-    div[data-testid="stChatMessage"] {
-        background: rgba(10, 25, 47, 0.6) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
-    }
+        /* Force multi-column layouts (st.columns) to stack vertically on phone screens */
+        [data-testid="column"] {
+            width: 100% !important;
+            flex: 1 1 100% !important;
+            min-width: 100% !important;
+            margin-bottom: 0.5rem !important;
+        }
 
-    /* --- Mobile Responsiveness Overrides --- */
-@media (max-width: 768px) {
-    /* Reduce top and side padding on main container */
-    .main .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 2rem !important;
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
-    }
+        /* Scale down large headings for smaller mobile displays */
+        h1 {
+            font-size: 1.6rem !important;
+            line-height: 1.2 !important;
+        }
+        h2 {
+            font-size: 1.3rem !important;
+        }
+        h3 {
+            font-size: 1.1rem !important;
+        }
 
-    /* Force columns (st.columns) to stack vertically on mobile */
-    [data-testid="column"] {
-        width: 100% !important;
-        flex: 1 1 100% !important;
-        min-width: 100% !important;
-        margin-bottom: 0.5rem;
-    }
+        /* Full-width buttons on mobile for easier touch targets */
+        .stButton > button {
+            width: 100% !important;
+            font-size: 16px !important; /* Prevents auto-zoom on iOS Safari */
+            padding: 10px 0 !important;
+        }
 
-    /* Make buttons full width for easy tapping */
-    .stButton > button {
-        width: 100% !important;
-        font-size: 16px !important; /* Prevents auto-zoom on iOS */
-    }
+        /* Floating chat bar padding at bottom of mobile viewports */
+        .stChatInput {
+            bottom: 12px !important;
+        }
 
-    /* Adjust typography size for mobile screens */
-    h1 {
-        font-size: 1.8rem !important;
+        /* Prevent side overflow on code snippets and tables */
+        .stCodeBlock, pre {
+            max-width: 100% !important;
+            overflow-x: auto !important;
+        }
     }
-    h2 {
-        font-size: 1.4rem !important;
-    }
-    h3 {
-        font-size: 1.2rem !important;
-    }
-
-    /* Adjust chat input floating bar padding */
-    .stChatInput {
-        bottom: 10px !important;
-    }
-}
-</style>
+    </style>
 """
 st.markdown(glass_css, unsafe_allow_html=True)
 
