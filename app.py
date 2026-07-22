@@ -192,6 +192,47 @@ glass_css = """
         padding: 16px;
         margin-bottom: 12px;
     }
+
+    /* --- Mobile Responsiveness Overrides --- */
+@media (max-width: 768px) {
+    /* Reduce top and side padding on main container */
+    .main .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    /* Force columns (st.columns) to stack vertically on mobile */
+    [data-testid="column"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Make buttons full width for easy tapping */
+    .stButton > button {
+        width: 100% !important;
+        font-size: 16px !important; /* Prevents auto-zoom on iOS */
+    }
+
+    /* Adjust typography size for mobile screens */
+    h1 {
+        font-size: 1.8rem !important;
+    }
+    h2 {
+        font-size: 1.4rem !important;
+    }
+    h3 {
+        font-size: 1.2rem !important;
+    }
+
+    /* Adjust chat input floating bar padding */
+    .stChatInput {
+        bottom: 10px !important;
+    }
+}
 </style>
 """
 st.markdown(glass_css, unsafe_allow_html=True)
