@@ -77,13 +77,13 @@ glass_css = """
         border-radius: 20px;
     }
 
-    /* Apply a distinct, clean glassy text box container around BOTH inputs */
+    /* UPDATED: Darker background, crisper border, and subtle drop shadow when NOT in hover/focus */
     div[data-testid="stTextInput"] > div,
     .stChatInput > div {
-        background: rgba(10, 25, 47, 0.7) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        background: rgba(6, 15, 30, 0.95) !important;
+        border: 1px solid rgba(56, 189, 248, 0.35) !important;
         border-radius: 12px !important;
-        box-shadow: none !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
         outline: none !important;
         transition: border-color 0.35s cubic-bezier(0.25, 1, 0.5, 1), 
                     box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1),
@@ -284,6 +284,7 @@ glass_css = """
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.25) !important;
             z-index: 999999 !important;
         }
+    }
 </style>
 """
 st.markdown(glass_css, unsafe_allow_html=True)
