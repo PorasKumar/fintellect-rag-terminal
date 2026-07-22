@@ -1,0 +1,10 @@
+langchain-core
+python-dotenv
+sentence-transformers
+langchain-huggingface
+langchain-text-splitters
+pinecone
+pinecone-text
+langchain-google-genai
+streamlit
+tavily-python
