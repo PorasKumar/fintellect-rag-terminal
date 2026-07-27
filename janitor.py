@@ -1,40 +1,49 @@
 import os
 import time
-import urllib.request
-import urllib.error
+from playwright.sync_api import sync_playwright
 from pinecone import Pinecone
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # ==========================================
-# 1. STREAMLIT APP KEEP-ALIVE PING
+# 1. HEADLESS BROWSER KEEP-ALIVE & AUTO-WAKE UP
 # ==========================================
-def ping_streamlit_app():
-    """Sends a GET request to keep the Streamlit app active."""
+def wake_streamlit_app():
+    """Opens the app using a headless browser and clicks 'Yes, get this app back up' if asleep."""
     app_url = os.getenv("STREAMLIT_APP_URL")
     if not app_url:
         print("⚠️ STREAMLIT_APP_URL environment variable is not set. Skipping ping.")
         return
 
-    print(f"📡 Pinging Streamlit app at {app_url}...")
+    print(f"📡 Opening Streamlit app at {app_url} with Playwright browser...")
     try:
-        req = urllib.request.Request(
-            app_url, 
-            headers={"User-Agent": "JanitorPingBot/1.0"}
-        )
-        with urllib.request.urlopen(req, timeout=10) as response:
-            if response.status == 200:
-                print(f"✅ Ping successful! App is active.")
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.goto(app_url, timeout=60000)
+            
+            # Wait for Streamlit JS evaluation
+            page.wait_for_timeout(5000)
+            
+            # Look for Streamlit's waking button variants
+            wake_button = page.locator("button:has-text('Yes, get this app back up')")
+            
+            if wake_button.count() > 0 and wake_button.is_visible():
+                print("😴 App is sleeping! Clicking 'Yes, get this app back up'...")
+                wake_button.click()
+                # Wait for backend container reboot
+                page.wait_for_timeout(20000)
+                print("✅ Clicked wake-up button and waited for app boot!")
             else:
-                print(f"⚠️ Ping received status code: {response.status}")
-    except urllib.error.URLError as e:
-        print(f"❌ Ping failed: {e.reason}")
-    except Exception as e:
-        print(f"❌ Unexpected error during ping: {e}")
+                print("✅ App is already active and running!")
 
-# Run keep-alive ping
-ping_streamlit_app()
+            browser.close()
+    except Exception as e:
+        print(f"❌ Error during app wake-up routine: {e}")
+
+# Run wake-up routine
+wake_streamlit_app()
 
 
 # ==========================================
