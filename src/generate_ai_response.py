@@ -60,6 +60,7 @@ class AIResponse:
                 "in the text (e.g., 'According to the Q3 report...').\n"
                 "4. NO SPECULATION: Differentiate clearly between historical facts/reported data and forward-looking "
                 "statements or projections found in the text.\n\n"
+                "If there is no data for asked query in retrieved documents, the add some credible data which complements the conversation"
                 
                 "RESPONSE STRUCTURE:\n"
                 "- Executive Summary: A concise, high-level overview of what the relevant documents conclude regarding the query.\n"
