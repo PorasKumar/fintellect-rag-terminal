@@ -6,21 +6,14 @@ The system combines dense semantic vector retrieval with sparse keyword matching
 (**Tavily API**) to answer complex financial queries with high precision and fresh data.
 
 ## 🏗 Architecture Overview
-Input: Take the user query as input.
-
-Web Search: Search the web for relevant context using the Tavily Search API.
-
-Document Structuring: Convert and store raw search results into standard LangChain.Document format.
-
-Text Chunking: Split the retrieved documents using RecursiveCharacterTextSplitter to optimize chunk sizes for embedding.
-
-Hybrid Embedding: Calculate dense embeddings via HuggingFace models and sparse embeddings via BM25 for the document text.
-
-Vector Storage: Upsert the generated dense and sparse vectors into the Pinecone vector database.
-
-Targeted Retrieval: Query Pinecone to retrieve only the most relevant context chunks using the original user query.
-
-Synthesis: Pass the retrieved context along with the user query to Gemini to generate a grounded, summarized response.
+-->Input: Take the user query as input.
+-->Web Search: Search the web for relevant context using the Tavily Search API.
+-->Document Structuring: Convert and store raw search results into standard LangChain.Document format.
+-->Text Chunking: Split the retrieved documents using RecursiveCharacterTextSplitter to optimize chunk sizes for embedding.
+-->Hybrid Embedding: Calculate dense embeddings via HuggingFace models and sparse embeddings via BM25 for the document text.
+-->Vector Storage: Upsert the generated dense and sparse vectors into the Pinecone vector database.
+-->Targeted Retrieval: Query Pinecone to retrieve only the most relevant context chunks using the original user query.
+-->Synthesis: Pass the retrieved context along with the user query to Gemini to generate a grounded, summarized response.
 
 
 ## ✨ Key Features
