@@ -6,6 +6,7 @@ The system combines dense semantic vector retrieval with sparse keyword matching
 (**Tavily API**) to answer complex financial queries with high precision and fresh data.
 
 ## 🏗 Architecture Overview
+
 •	-->Input: Take the user query as input.
 •	-->Web Search: Search the web for relevant context using the Tavily Search API.
 •	-->Document Structuring: Convert and store raw search results into standard LangChain.Document format.
